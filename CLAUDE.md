@@ -756,11 +756,13 @@ public sealed partial class MainViewModel : ObservableObject
 ### ⚠️ 자주 발생하는 실수
 
 **C# 코딩 일반:**
+
 1. **Span<T>와 async-await 함께 사용** - 불가능
 2. **불필요한 IReadOnlyCollection<T>, HashSet<T> 사용** - 성능 향상이 명확하지 않은 경우
 3. **요청하지 않은 기능까지 미리 구현** - 요청한 것만 구현, 나머지는 제안
 
 **WPF/MVVM 관련:**
+
 4. **WPF ViewModel에 System.Windows 네임스페이스 참조** - MVVM 위반
 5. **AvaloniaUI ViewModel에 Avalonia 네임스페이스 참조** - MVVM 위반
 6. **ViewModel 프로젝트에서 WindowsBase.dll 참조** - ICollectionView 사용하려다 WPF 의존성 발생
@@ -770,6 +772,7 @@ public sealed partial class MainViewModel : ObservableObject
 10. **Generic.xaml에 직접 스타일 작성** - 개별 XAML 파일로 분리하고 MergedDictionaries로 병합
 
 **MVVM 계층 분리 원칙:**
+
 - ViewModel: 모든 WPF 어셈블리 참조 불가 (순수 BCL만 사용)
 - ViewModel: `WindowsBase.dll` 참조 불가 (ICollectionView 포함)
 - ViewModel: `PresentationFramework.dll` 참조 불가 (CollectionViewSource 포함)
