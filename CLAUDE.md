@@ -399,7 +399,85 @@ public sealed class SomeClass
 ### 5.1 기본 원칙
 - **.NET CSharp 코드 생성 지침을 기본으로 할 것**
 
-### 5.2 MVVM 패턴
+### 5.2 WPF 솔루션 및 프로젝트 구조
+
+#### 5.2.1 솔루션 구조 원칙
+
+**솔루션 이름은 애플리케이션 이름**
+- 예시: `GameDataTool` 솔루션 = 실행 가능한 .NET Assembly 이름
+
+#### 5.2.2 프로젝트 명명 규칙
+
+```
+SolutionName/
+├── SolutionName.Core              // .NET Class Library (비즈니스 로직, 순수 C#)
+├── SolutionName.Core.Tests        // xUnit Test Project
+├── SolutionName.WpfApp            // WPF Application Project (실행 진입점)
+├── SolutionName.WpfLib            // WPF Class Library (재사용 가능한 WPF 컴포넌트)
+├── SolutionName.UI                // WPF Custom Control Library (커스텀 컨트롤)
+└── [Solution Folders]
+    ├── SolutionName/              // 주요 프로젝트 그룹
+    └── Common/                    // 범용 프로젝트 그룹
+```
+
+**프로젝트 타입별 명명:**
+- `.Core`: .NET Class Library - 비즈니스 로직, 데이터 모델, 서비스 (UI 프레임워크 독립)
+- `.Core.Tests`: xUnit/NUnit/MSTest Test Project
+- `.WpfApp`: WPF Application Project - 실행 진입점, App.xaml
+- `.WpfLib`: WPF Class Library - 재사용 가능한 WPF UserControl, Window
+- `.UI`: WPF Custom Control Library - ResourceDictionary 기반 커스텀 컨트롤
+
+#### 5.2.3 Solution Folder 활용
+
+**범용 기능 분리:**
+```
+Solution 'GameDataTool'
+├── Solution Folder: GameDataTool
+│   ├── GameDataTool.Core
+│   ├── GameDataTool.Core.Tests
+│   ├── GameDataTool.WpfApp
+│   ├── GameDataTool.WpfLib
+│   └── GameDataTool.UI
+└── Solution Folder: Common
+    ├── Common.Utilities
+    ├── Common.Logging
+    └── Common.Configuration
+```
+
+**규칙:**
+- 애플리케이션 고유 기능: `SolutionName` Solution Folder에 배치
+- 범용/재사용 기능: `Common` Solution Folder에 배치
+- Solution Folder는 가상 폴더 (실제 파일 시스템과 무관)
+
+#### 5.2.4 실제 예시
+
+```
+Solution 'GameDataTool'
+├── GameDataTool (Solution Folder)
+│   ├── GameDataTool.Core
+│   │   ├── Models/
+│   │   ├── Services/
+│   │   └── Repositories/
+│   ├── GameDataTool.Core.Tests
+│   │   └── Services/
+│   ├── GameDataTool.WpfApp
+│   │   ├── App.xaml
+│   │   ├── Views/
+│   │   └── ViewModels/
+│   ├── GameDataTool.WpfLib
+│   │   └── Controls/
+│   └── GameDataTool.UI
+│       ├── Themes/
+│       └── CustomControls/
+└── Common (Solution Folder)
+    ├── Common.Utilities
+    ├── Common.Logging
+    └── Common.Configuration
+```
+
+---
+
+### 5.3 MVVM 패턴
 - **기본적으로 MVVM 형태로 코드를 생성할 것**
 - **ViewModel 클래스에 UI 프레임워크 의존성 금지:**
   - **WPF**: ViewModel class에 `System.Windows`로 시작하는 클래스들이 참조되지 않는 것을 의미
@@ -411,6 +489,87 @@ public sealed class SomeClass
 
 ### 5.3 MVVM 프레임워크
 - **MVVM을 구조로 잡을 때는 CommunityToolkit.Mvvm을 기본으로 사용**
+
+#### 5.3.1 CommunityToolkit.Mvvm Attribute 스타일 가이드
+
+**ObservableProperty Attribute 작성 규칙:**
+
+```csharp
+// ✅ 좋은 예: Attribute가 1개일 경우 inline으로 작성
+// Good: Single attribute written inline
+[ObservableProperty] private string _userName = string.Empty;
+
+[ObservableProperty] private int _age;
+
+[ObservableProperty] private bool _isActive;
+
+// ✅ 좋은 예: Attribute가 여러 개일 경우, ObservableProperty는 항상 inline
+// Good: Multiple attributes, ObservableProperty always inline
+[NotifyPropertyChangedRecipients]
+[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+[ObservableProperty] private string _email = string.Empty;
+
+[NotifyDataErrorInfo]
+[Required(ErrorMessage = "이름은 필수입니다.")]
+[MinLength(2, ErrorMessage = "이름은 최소 2글자 이상이어야 합니다.")]
+[ObservableProperty] private string _name = string.Empty;
+
+[NotifyPropertyChangedRecipients]
+[NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
+[NotifyCanExecuteChangedFor(nameof(UpdateCommand))]
+[ObservableProperty] private User? _selectedUser;
+
+// ❌ 나쁜 예: ObservableProperty를 별도 줄에 작성
+// Bad: ObservableProperty on separate line
+[NotifyPropertyChangedRecipients]
+[NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+[ObservableProperty]
+private string _email = string.Empty;
+```
+
+**실제 ViewModel 예시:**
+
+```csharp
+namespace MyApp.ViewModels;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+public sealed partial class UserViewModel : ObservableObject
+{
+    // 단일 Attribute
+    // Single attribute
+    [ObservableProperty] private string _firstName = string.Empty;
+    [ObservableProperty] private string _lastName = string.Empty;
+    [ObservableProperty] private int _age;
+
+    // 여러 Attribute - ObservableProperty는 inline
+    // Multiple attributes - ObservableProperty inline
+    [NotifyPropertyChangedRecipients]
+    [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
+    [ObservableProperty] private string _email = string.Empty;
+
+    [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
+    [NotifyCanExecuteChangedFor(nameof(UpdateCommand))]
+    [ObservableProperty] private User? _selectedUser;
+
+    [RelayCommand(CanExecute = nameof(CanSave))]
+    private async Task SaveAsync()
+    {
+        // 저장 로직
+        // Save logic
+    }
+
+    private bool CanSave() => !string.IsNullOrWhiteSpace(Email);
+}
+```
+
+**핵심 규칙:**
+- **Attribute가 1개**: `[ObservableProperty]` inline으로 필드 선언 바로 앞에 작성
+- **Attribute가 여러 개**: 다른 Attribute들은 각 줄에 작성하되, `[ObservableProperty]`는 **항상 마지막에 inline**으로 작성
+- 목적: 코드 가독성 향상 및 일관된 코딩 스타일 유지
+
+---
 
 ### 5.4 XAML 코드 작성
 - **XAML 코드를 생성할 때는 CustomControl을 사용하여 ResourceDictionary를 통한 Stand-Alone Control Style Resource를 사용**
