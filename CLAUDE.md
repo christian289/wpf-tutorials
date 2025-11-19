@@ -131,6 +131,254 @@ if (condition)
     throw new Exception("오류가 발생했습니다.");
 ```
 
+### 3.15 Dependency Injection 및 GenericHost 사용
+
+- **Microsoft.Extensions.DependencyInjection을 사용하여 의존성 주입 구현**
+- **GenericHost (Microsoft.Extensions.Hosting)를 기본으로 사용**
+- **Constructor Injection을 통한 서비스 주입 방식 적용**
+
+#### 3.15.1 Console 및 일반 프로젝트 - Program.cs
+
+```csharp
+// Program.cs
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+// GenericHost를 사용한 DI 설정
+// Configure DI using GenericHost
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices((context, services) =>
+    {
+        // 서비스 등록
+        // Register services
+        services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddTransient<IEmailService, EmailService>();
+
+        // 메인 애플리케이션 서비스 등록
+        // Register main application service
+        services.AddSingleton<App>();
+    })
+    .Build();
+
+// ServiceProvider를 통해 서비스 가져오기
+// Get service through ServiceProvider
+var app = host.Services.GetRequiredService<App>();
+await app.RunAsync();
+
+// 애플리케이션 클래스 - Constructor Injection
+// Application class - Constructor Injection
+public sealed class App(IUserService userService, IEmailService emailService)
+{
+    private readonly IUserService _userService = userService;
+    private readonly IEmailService _emailService = emailService;
+
+    public async Task RunAsync()
+    {
+        // 주입된 서비스 사용
+        // Use injected services
+        var users = await _userService.GetAllUsersAsync();
+
+        foreach (var user in users)
+        {
+            await _emailService.SendWelcomeEmailAsync(user.Email);
+        }
+    }
+}
+```
+
+#### 3.15.2 WPF 프로젝트 - App.xaml.cs
+
+```csharp
+// App.xaml.cs
+namespace MyApp;
+
+using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+public partial class App : Application
+{
+    private readonly IHost _host;
+
+    public App()
+    {
+        // GenericHost 생성 및 서비스 등록
+        // Create GenericHost and register services
+        _host = Host.CreateDefaultBuilder()
+            .ConfigureServices((context, services) =>
+            {
+                // Services 등록
+                // Register services
+                services.AddSingleton<IUserRepository, UserRepository>();
+                services.AddSingleton<IUserService, UserService>();
+                services.AddTransient<IDialogService, DialogService>();
+
+                // ViewModels 등록
+                // Register ViewModels
+                services.AddTransient<MainViewModel>();
+                services.AddTransient<SettingsViewModel>();
+
+                // Views 등록
+                // Register Views
+                services.AddSingleton<MainWindow>();
+            })
+            .Build();
+    }
+
+    protected override async void OnStartup(StartupEventArgs e)
+    {
+        await _host.StartAsync();
+
+        // MainWindow를 ServiceProvider로부터 가져오기
+        // Get MainWindow from ServiceProvider
+        var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+        mainWindow.Show();
+
+        base.OnStartup(e);
+    }
+
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        using (_host)
+        {
+            await _host.StopAsync();
+        }
+
+        base.OnExit(e);
+    }
+}
+```
+
+#### 3.15.3 MainWindow.xaml.cs - Constructor Injection
+
+```csharp
+// MainWindow.xaml.cs
+namespace MyApp;
+
+using System.Windows;
+
+public partial class MainWindow : Window
+{
+    // Constructor Injection을 통한 ViewModel 주입
+    // ViewModel injection through Constructor Injection
+    public MainWindow(MainViewModel viewModel)
+    {
+        InitializeComponent();
+        DataContext = viewModel;
+    }
+}
+```
+
+#### 3.15.4 ViewModel - Constructor Injection
+
+```csharp
+// ViewModels/MainViewModel.cs
+namespace MyApp.ViewModels;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+public sealed partial class MainViewModel : ObservableObject
+{
+    private readonly IUserService _userService;
+    private readonly IDialogService _dialogService;
+
+    // Constructor Injection
+    public MainViewModel(IUserService userService, IDialogService dialogService)
+    {
+        _userService = userService;
+        _dialogService = dialogService;
+
+        LoadDataAsync();
+    }
+
+    [ObservableProperty]
+    private ObservableCollection<User> users = [];
+
+    [RelayCommand]
+    private async Task LoadDataAsync()
+    {
+        try
+        {
+            var userList = await _userService.GetAllUsersAsync();
+            Users = new ObservableCollection<User>(userList);
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowErrorAsync("오류 발생", ex.Message);
+            // Error occurred
+        }
+    }
+}
+```
+
+#### 3.15.5 서비스 Lifetime 규칙
+
+- **Singleton**: 애플리케이션 전체에서 하나의 인스턴스만 생성
+  - Repository, 전역 상태 관리 서비스
+  - `services.AddSingleton<IUserRepository, UserRepository>()`
+
+- **Scoped**: 요청(Scope)당 하나의 인스턴스 생성
+  - DbContext, 트랜잭션 단위 서비스
+  - `services.AddScoped<IUserService, UserService>()`
+  - ⚠️ WPF에서는 일반적으로 사용하지 않음 (Web 애플리케이션에서 주로 사용)
+
+- **Transient**: 요청할 때마다 새 인스턴스 생성
+  - ViewModel, 일회성 서비스
+  - `services.AddTransient<MainViewModel>()`
+
+#### 3.15.6 ServiceProvider 직접 사용 (권장하지 않음)
+
+```csharp
+// Service Locator 패턴 (안티패턴)
+// Service Locator pattern (anti-pattern)
+public sealed class SomeClass
+{
+    private readonly IServiceProvider _serviceProvider;
+
+    public SomeClass(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public void DoSomething()
+    {
+        // ⚠️ 권장하지 않음: ServiceProvider를 직접 사용
+        // Not recommended: Using ServiceProvider directly
+        var service = _serviceProvider.GetRequiredService<IUserService>();
+    }
+}
+
+// 올바른 방법: Constructor Injection 사용
+// Correct way: Use Constructor Injection
+public sealed class SomeClass
+{
+    private readonly IUserService _userService;
+
+    public SomeClass(IUserService userService)
+    {
+        _userService = userService;
+    }
+
+    public void DoSomething()
+    {
+        // ✅ 권장: Constructor Injection으로 주입받은 서비스 사용
+        // Recommended: Use service injected through Constructor Injection
+        _userService.GetAllUsersAsync();
+    }
+}
+```
+
+#### 3.15.7 필수 NuGet 패키지
+
+```xml
+<ItemGroup>
+  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+  <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+</ItemGroup>
+```
+
 ---
 
 ## 4. .NET Excel 정보 다루는 지침
@@ -737,6 +985,9 @@ public sealed partial class MainViewModel : ObservableObject
 - [ ] Literal string은 const로 정의
 - [ ] Span<T> 사용 시 async-await 충돌 확인
 - [ ] 한글 메시지와 영문 메시지 병기
+- [ ] GenericHost 및 DI(Dependency Injection) 설정
+- [ ] Constructor Injection 패턴 사용
+- [ ] ServiceProvider 직접 사용 지양 (Service Locator 패턴 금지)
 
 **WPF 프로젝트:**
 - [ ] WPF ViewModel에 System.Windows 참조 없음 확인
@@ -748,6 +999,9 @@ public sealed partial class MainViewModel : ObservableObject
 - [ ] Generic.xaml은 MergedDictionaries 허브로만 사용
 - [ ] 각 컨트롤 스타일을 개별 XAML 파일로 분리
 - [ ] CollectionView 사용 시 Service Layer 패턴 적용
+- [ ] App.xaml.cs에서 GenericHost 설정 및 DI 컨테이너 구성
+- [ ] MainWindow 및 ViewModel을 DI 컨테이너에 등록
+- [ ] View와 ViewModel을 Constructor Injection으로 연결
 
 ---
 
@@ -760,16 +1014,18 @@ public sealed partial class MainViewModel : ObservableObject
 1. **Span<T>와 async-await 함께 사용** - 불가능
 2. **불필요한 IReadOnlyCollection<T>, HashSet<T> 사용** - 성능 향상이 명확하지 않은 경우
 3. **요청하지 않은 기능까지 미리 구현** - 요청한 것만 구현, 나머지는 제안
+4. **ServiceProvider를 직접 주입받아 사용** - Service Locator 패턴(안티패턴), Constructor Injection 사용
+5. **서비스 Lifetime 잘못 설정** - Singleton/Scoped/Transient 적절히 선택
 
 **WPF/MVVM 관련:**
-
-4. **WPF ViewModel에 System.Windows 네임스페이스 참조** - MVVM 위반
-5. **AvaloniaUI ViewModel에 Avalonia 네임스페이스 참조** - MVVM 위반
-6. **ViewModel 프로젝트에서 WindowsBase.dll 참조** - ICollectionView 사용하려다 WPF 의존성 발생
-7. **ViewModel 프로젝트에서 PresentationFramework.dll 직접 참조** - CollectionViewSource 사용 불가
-8. **ViewModel에서 ICollectionView 타입 사용** - IEnumerable로 받아야 함
-9. **CollectionView 없이 여러 View에서 개별 컬렉션 관리** - 데이터 동기화 문제 발생
-10. **Generic.xaml에 직접 스타일 작성** - 개별 XAML 파일로 분리하고 MergedDictionaries로 병합
+6. **WPF ViewModel에 System.Windows 네임스페이스 참조** - MVVM 위반
+7. **AvaloniaUI ViewModel에 Avalonia 네임스페이스 참조** - MVVM 위반
+8. **ViewModel 프로젝트에서 WindowsBase.dll 참조** - ICollectionView 사용하려다 WPF 의존성 발생
+9. **ViewModel 프로젝트에서 PresentationFramework.dll 직접 참조** - CollectionViewSource 사용 불가
+10. **ViewModel에서 ICollectionView 타입 사용** - IEnumerable로 받아야 함
+11. **CollectionView 없이 여러 View에서 개별 컬렉션 관리** - 데이터 동기화 문제 발생
+12. **Generic.xaml에 직접 스타일 작성** - 개별 XAML 파일로 분리하고 MergedDictionaries로 병합
+13. **App.xaml.cs에서 GenericHost 설정 누락** - DI 컨테이너 구성 필요
 
 **MVVM 계층 분리 원칙:**
 
