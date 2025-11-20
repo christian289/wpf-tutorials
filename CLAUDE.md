@@ -1158,6 +1158,26 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 </ResourceDictionary>
 ```
 
+**⚠️ ResourceInclude vs MergeResourceInclude 구분:**
+
+- **ResourceInclude**: 일반 ResourceDictionary 파일 (Generic.axaml, Styles 등)에서 사용
+- **MergeResourceInclude**: Application.Resources (App.axaml)에서만 사용
+
+```xml
+<!-- App.axaml - MergeResourceInclude 사용 -->
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YourNamespace.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="/Assets/AppResources.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+```
+
 3. **개별 컨트롤 ControlTheme 정의**
 
 각 컨트롤마다 독립적인 AXAML 파일에 ControlTheme 정의:
