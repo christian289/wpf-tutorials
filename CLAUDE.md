@@ -1172,6 +1172,10 @@ public partial class MyUserControl : UserControl
 - PreviewMouseDown은 터널링 이벤트이므로 자식 컨트롤보다 먼저 처리됨
 - MVVM 패턴에서는 Code-Behind에서 처리 (View 레이어의 포커스 관리 로직)
 
+#### 5.7.4 참고 자료
+
+- [WPF Popup 포커스 이슈 - .NET Dev 포럼](https://forum.dotnetdev.kr/t/wpf-popup/8296)
+
 ---
 
 ## 6. .NET AvaloniaUI 코드 생성 지침
