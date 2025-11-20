@@ -1434,16 +1434,6 @@ public partial class HomeView : UserControl
 - ContentControl.Content에는 ViewModel 인스턴스를 바인딩 (타입이 아닌 인스턴스)
 - View는 DataContext를 자동으로 받음 (별도 설정 불필요)
 
-**GlobalUsings.cs 권장 설정:**
-
-```csharp
-// GlobalUsings.cs
-global using System.Windows;
-global using System.Windows.Controls;
-global using CommunityToolkit.Mvvm.ComponentModel;
-global using CommunityToolkit.Mvvm.Input;
-```
-
 #### 5.8.8 프로젝트 구조 예시
 
 ```
