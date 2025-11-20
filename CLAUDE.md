@@ -1118,14 +1118,13 @@ namespace YourNamespace;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 
-public class CustomButton : TemplatedControl
+public class CustomButton : Button
 {
     // StyledProperty 정의
     // Define StyledProperty
     public static readonly StyledProperty<string> TextProperty =
-        AvalonedProperty.Register<CustomButton, string>(nameof(Text), defaultValue: string.Empty);
+        AvaloniaProperty.Register<CustomButton, string>(nameof(Text), defaultValue: string.Empty);
 
     public string Text
     {
@@ -1134,7 +1133,7 @@ public class CustomButton : TemplatedControl
     }
 
     public static readonly StyledProperty<bool> IsHighlightedProperty =
-        AvalonedProperty.Register<CustomButton, bool>(nameof(IsHighlighted), defaultValue: false);
+        AvaloniaProperty.Register<CustomButton, bool>(nameof(IsHighlighted), defaultValue: false);
 
     public bool IsHighlighted
     {
@@ -1153,8 +1152,8 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="/Themes/CustomButton.axaml" />
-        <ResourceInclude Source="/Themes/CustomTextBox.axaml" />
+        <ResourceDictionary Source="/Themes/CustomButton.axaml" />
+        <ResourceDictionary Source="/Themes/CustomTextBox.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
 ```
@@ -1237,8 +1236,8 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceInclude Source="/Themes/GdtBranchSelectionDialog.axaml" />
-        <ResourceInclude Source="/Themes/GdtDataGrid.axaml" />
+        <ResourceDictionary Source="/Themes/GdtBranchSelectionDialog.axaml" />
+        <ResourceDictionary Source="/Themes/GdtDataGrid.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
 ```
@@ -1310,7 +1309,7 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 - ControlTheme 기반으로 테마와 로직 완전 분리
 - CSS Class를 통한 유연한 스타일 변형
 - Pseudo Classes (:pointerover, :pressed 등)를 통한 상태 관리
-- ResourceInclude를 통한 테마 모듈화
+- MergedDictionaries를 통한 테마 모듈화
 - 팀 작업 시 파일 단위로 작업 분리 가능
 
 #### 6.5.2 WPF vs AvaloniaUI 주요 차이점
@@ -1321,7 +1320,7 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 | 스타일 정의 | Style + ControlTemplate | ControlTheme |
 | 상태 관리 | Trigger, DataTrigger | Pseudo Classes, Style Selector |
 | CSS 지원 | ❌ | ✅ (Classes 속성) |
-| 리소스 병합 | MergedDictionaries | MergedDictionaries + ResourceInclude |
+| 리소스 병합 | MergedDictionaries | MergedDictionaries |
 | 의존성 속성 | DependencyProperty | StyledProperty, DirectProperty |
 
 ### 6.6 Dependency Injection 및 GenericHost 사용
@@ -1551,11 +1550,9 @@ using CommunityToolkit.Mvvm.Input;
 // ViewModel - System.Windows 참조 없음
 public sealed partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty]
-    private string _userName = string.Empty;
+    [ObservableProperty] private string _userName = string.Empty;
 
-    [ObservableProperty]
-    private bool _isLoading;
+    [ObservableProperty] private bool _isLoading;
 
     [RelayCommand]
     private async Task LoadDataAsync()
@@ -1619,8 +1616,9 @@ public sealed partial class MainViewModel : ObservableObject
 - [ ] AvaloniaUI ViewModel에 Avalonia 참조 없음 확인
 - [ ] ViewModel 프로젝트에서 Avalonia.Base.dll, Avalonia.Controls.dll 참조 제거
 - [ ] ViewModel은 순수 BCL 타입만 사용 (IEnumerable, ObservableCollection 등)
+- [ ] CustomControl은 기존 Avalonia 컨트롤 상속 (예: Button, TextBox 등)
 - [ ] CustomControl에서 StyledProperty 사용
-- [ ] Generic.axaml은 ResourceInclude 허브로만 사용
+- [ ] Generic.axaml은 MergedDictionaries 허브로만 사용
 - [ ] 각 컨트롤 ControlTheme을 개별 AXAML 파일로 분리
 - [ ] CSS Class 기반 스타일 적용 (Classes 속성)
 - [ ] Pseudo Classes를 사용한 상태 관리 (:pointerover, :pressed 등)
@@ -1655,11 +1653,12 @@ public sealed partial class MainViewModel : ObservableObject
 **AvaloniaUI/MVVM 관련:**
 13. **AvaloniaUI ViewModel에 Avalonia 네임스페이스 참조** - MVVM 위반
 14. **ViewModel 프로젝트에서 Avalonia.Base.dll, Avalonia.Controls.dll 참조** - AvaloniaUI 의존성 발생
-15. **WPF의 DependencyProperty를 AvaloniaUI에서 그대로 사용** - StyledProperty 또는 DirectProperty 사용 필요
-16. **WPF의 Trigger를 AvaloniaUI에서 그대로 사용** - Pseudo Classes와 Style Selector 사용 필요
-17. **WPF의 CollectionViewSource를 AvaloniaUI에서 사용** - DataGridCollectionView 또는 ReactiveUI 사용 필요
-18. **Generic.axaml에 직접 ControlTheme 작성** - 개별 AXAML 파일로 분리하고 ResourceInclude로 병합
-19. **App.axaml.cs에서 GenericHost 설정 누락** - DI 컨테이너 구성 필요
+15. **CustomControl을 TemplatedControl에서 직접 상속** - Button, TextBox 등 기존 컨트롤 상속 필요
+16. **WPF의 DependencyProperty를 AvaloniaUI에서 그대로 사용** - StyledProperty 또는 DirectProperty 사용 필요
+17. **WPF의 Trigger를 AvaloniaUI에서 그대로 사용** - Pseudo Classes와 Style Selector 사용 필요
+18. **WPF의 CollectionViewSource를 AvaloniaUI에서 사용** - DataGridCollectionView 또는 ReactiveUI 사용 필요
+19. **Generic.axaml에 직접 ControlTheme 작성** - 개별 AXAML 파일로 분리하고 MergedDictionaries로 병합
+20. **App.axaml.cs에서 GenericHost 설정 누락** - DI 컨테이너 구성 필요
 
 **MVVM 계층 분리 원칙:**
 
