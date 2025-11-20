@@ -1152,8 +1152,8 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Themes/CustomButton.axaml" />
-        <ResourceDictionary Source="/Themes/CustomTextBox.axaml" />
+        <ResourceInclude Source="/Themes/CustomButton.axaml" />
+        <ResourceInclude Source="/Themes/CustomTextBox.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
 ```
@@ -1236,8 +1236,8 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Themes/GdtBranchSelectionDialog.axaml" />
-        <ResourceDictionary Source="/Themes/GdtDataGrid.axaml" />
+        <ResourceInclude Source="/Themes/GdtBranchSelectionDialog.axaml" />
+        <ResourceInclude Source="/Themes/GdtDataGrid.axaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
 ```
@@ -1309,7 +1309,7 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 - ControlTheme 기반으로 테마와 로직 완전 분리
 - CSS Class를 통한 유연한 스타일 변형
 - Pseudo Classes (:pointerover, :pressed 등)를 통한 상태 관리
-- MergedDictionaries를 통한 테마 모듈화
+- ResourceInclude를 통한 테마 모듈화
 - 팀 작업 시 파일 단위로 작업 분리 가능
 
 #### 6.5.2 WPF vs AvaloniaUI 주요 차이점
@@ -1320,7 +1320,7 @@ Generic.axaml은 MergedDictionaries를 통해 개별 테마를 병합:
 | 스타일 정의 | Style + ControlTemplate | ControlTheme |
 | 상태 관리 | Trigger, DataTrigger | Pseudo Classes, Style Selector |
 | CSS 지원 | ❌ | ✅ (Classes 속성) |
-| 리소스 병합 | MergedDictionaries | MergedDictionaries |
+| 리소스 병합 | MergedDictionaries + ResourceDictionary | MergedDictionaries + ResourceInclude |
 | 의존성 속성 | DependencyProperty | StyledProperty, DirectProperty |
 
 ### 6.6 Dependency Injection 및 GenericHost 사용
@@ -1657,7 +1657,7 @@ public sealed partial class MainViewModel : ObservableObject
 16. **WPF의 DependencyProperty를 AvaloniaUI에서 그대로 사용** - StyledProperty 또는 DirectProperty 사용 필요
 17. **WPF의 Trigger를 AvaloniaUI에서 그대로 사용** - Pseudo Classes와 Style Selector 사용 필요
 18. **WPF의 CollectionViewSource를 AvaloniaUI에서 사용** - DataGridCollectionView 또는 ReactiveUI 사용 필요
-19. **Generic.axaml에 직접 ControlTheme 작성** - 개별 AXAML 파일로 분리하고 MergedDictionaries로 병합
+19. **Generic.axaml에 직접 ControlTheme 작성** - 개별 AXAML 파일로 분리하고 ResourceInclude로 병합
 20. **App.axaml.cs에서 GenericHost 설정 누락** - DI 컨테이너 구성 필요
 
 **MVVM 계층 분리 원칙:**
