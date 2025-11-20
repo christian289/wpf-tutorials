@@ -1,0 +1,56 @@
+<UserControl x:Class="WpfDataTemplateSample.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodels="clr-namespace:WpfDataTemplateSample.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:SettingsViewModel}"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+
+    <Grid Background="#FFF5E6">
+        <StackPanel Margin="40"
+                    VerticalAlignment="Center">
+
+            <TextBlock Margin="0,0,0,30"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#E67E22"
+                       Text="{Binding Title}" />
+
+            <Border Margin="0,0,0,20"
+                    Padding="30"
+                    Background="White"
+                    BorderBrush="#E67E22"
+                    BorderThickness="2"
+                    CornerRadius="10">
+                <StackPanel>
+                    <CheckBox Margin="0,0,0,15"
+                              Content="다크 모드 활성화"
+                              FontSize="16"
+                              IsChecked="{Binding IsDarkModeEnabled}" />
+
+                    <StackPanel Margin="0,0,0,15"
+                                Orientation="Horizontal">
+                        <TextBlock Margin="0,0,10,0"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   Text="Font Size: " />
+                        <TextBox Width="60"
+                                 Height="30"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="14"
+                                 Text="{Binding FontSize}" />
+                    </StackPanel>
+
+                    <TextBlock FontSize="14"
+                               Foreground="#7F8C8D"
+                               LineHeight="20"
+                               Text="{Binding Description}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl>

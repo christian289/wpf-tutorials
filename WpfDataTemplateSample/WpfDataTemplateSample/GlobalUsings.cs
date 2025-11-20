@@ -1,0 +1,4 @@
+global using System.Windows;
+global using System.Windows.Controls;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
