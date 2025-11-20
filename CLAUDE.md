@@ -410,6 +410,7 @@ public sealed class SomeClass
 
 ```
 SolutionName/
+├── SolutionName.Abstractions      // .NET Class Library (Interface, abstract class 등 추상 타입)
 ├── SolutionName.Core              // .NET Class Library (비즈니스 로직, 순수 C#)
 ├── SolutionName.Core.Tests        // xUnit Test Project
 ├── SolutionName.WpfApp            // WPF Application Project (실행 진입점)
@@ -421,11 +422,27 @@ SolutionName/
 ```
 
 **프로젝트 타입별 명명:**
+- `.Abstractions`: .NET Class Library - Interface, abstract class 등 추상 타입 정의 (Inversion of Control)
 - `.Core`: .NET Class Library - 비즈니스 로직, 데이터 모델, 서비스 (UI 프레임워크 독립)
 - `.Core.Tests`: xUnit/NUnit/MSTest Test Project
 - `.WpfApp`: WPF Application Project - 실행 진입점, App.xaml
 - `.WpfLib`: WPF Class Library - 재사용 가능한 WPF UserControl, Window
 - `.UI`: WPF Custom Control Library - ResourceDictionary 기반 커스텀 컨트롤
+
+**프로젝트 의존성 계층:**
+```
+SolutionName.WpfApp
+    ↓ 참조
+SolutionName.Core
+    ↓ 참조
+SolutionName.Abstractions (최상단 - 다른 프로젝트에 의존하지 않음)
+```
+
+**Abstractions 레이어의 역할:**
+- 모든 Interface와 abstract class 보관
+- 구체 타입을 직접 참조하지 않고 추상 타입으로 의존성 역전 (Dependency Inversion Principle)
+- 런타임에 DI 컨테이너를 통해 실제 구현체 주입
+- 테스트 시 Mock 객체로 교체 가능
 
 #### 5.2.3 Solution Folder 활용
 
@@ -433,6 +450,7 @@ SolutionName/
 ```
 Solution 'GameDataTool'
 ├── Solution Folder: GameDataTool
+│   ├── GameDataTool.Abstractions
 │   ├── GameDataTool.Core
 │   ├── GameDataTool.Core.Tests
 │   ├── GameDataTool.WpfApp
@@ -454,10 +472,21 @@ Solution 'GameDataTool'
 ```
 Solution 'GameDataTool'
 ├── GameDataTool (Solution Folder)
+│   ├── GameDataTool.Abstractions
+│   │   ├── Services/
+│   │   │   ├── IUserService.cs
+│   │   │   └── IDataService.cs
+│   │   └── Repositories/
+│   │       ├── IUserRepository.cs
+│   │       └── IDataRepository.cs
 │   ├── GameDataTool.Core
 │   │   ├── Models/
 │   │   ├── Services/
+│   │   │   ├── UserService.cs
+│   │   │   └── DataService.cs
 │   │   └── Repositories/
+│   │       ├── UserRepository.cs
+│   │       └── DataRepository.cs
 │   ├── GameDataTool.Core.Tests
 │   │   └── Services/
 │   ├── GameDataTool.WpfApp
@@ -1060,6 +1089,7 @@ public sealed partial class AppViewModel(IMemberCollectionService memberService)
 
 ```
 SolutionName/
+├── SolutionName.Abstractions      // .NET Class Library (Interface, abstract class 등 추상 타입)
 ├── SolutionName.Core              // .NET Class Library (비즈니스 로직, 순수 C#)
 ├── SolutionName.Core.Tests        // xUnit Test Project
 ├── SolutionName.AvaloniaApp       // Avalonia Application Project (실행 진입점)
@@ -1071,11 +1101,27 @@ SolutionName/
 ```
 
 **프로젝트 타입별 명명:**
+- `.Abstractions`: .NET Class Library - Interface, abstract class 등 추상 타입 정의 (Inversion of Control)
 - `.Core`: .NET Class Library - 비즈니스 로직, 데이터 모델, 서비스 (UI 프레임워크 독립)
 - `.Core.Tests`: xUnit/NUnit/MSTest Test Project
 - `.AvaloniaApp`: Avalonia Application Project - 실행 진입점, App.axaml
 - `.AvaloniaLib`: Avalonia Class Library - 재사용 가능한 UserControl, Window
 - `.UI`: Avalonia Custom Control Library - ControlTheme 기반 커스텀 컨트롤
+
+**프로젝트 의존성 계층:**
+```
+SolutionName.AvaloniaApp
+    ↓ 참조
+SolutionName.Core
+    ↓ 참조
+SolutionName.Abstractions (최상단 - 다른 프로젝트에 의존하지 않음)
+```
+
+**Abstractions 레이어의 역할:**
+- 모든 Interface와 abstract class 보관
+- 구체 타입을 직접 참조하지 않고 추상 타입으로 의존성 역전 (Dependency Inversion Principle)
+- 런타임에 DI 컨테이너를 통해 실제 구현체 주입
+- 테스트 시 Mock 객체로 교체 가능
 
 ### 6.3 MVVM 패턴
 - **기본적으로 MVVM 형태로 코드를 생성할 것**
