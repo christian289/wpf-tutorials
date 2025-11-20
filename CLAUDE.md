@@ -1112,9 +1112,9 @@ SolutionName/
 ```
 SolutionName.AvaloniaApp
     ↓ 참조
-SolutionName.Core
-    ↓ 참조
 SolutionName.Abstractions (최상단 - 다른 프로젝트에 의존하지 않음)
+    ↓ 참조
+SolutionName.Core
 ```
 
 **Abstractions 레이어의 역할:**
