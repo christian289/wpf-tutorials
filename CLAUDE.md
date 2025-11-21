@@ -413,8 +413,10 @@ SolutionName/
 ├── SolutionName.Abstractions      // .NET Class Library (Interface, abstract class 등 추상 타입)
 ├── SolutionName.Core              // .NET Class Library (비즈니스 로직, 순수 C#)
 ├── SolutionName.Core.Tests        // xUnit Test Project
-├── SolutionName.WpfApp            // WPF Application Project (실행 진입점)
+├── SolutionName.ViewModels        // .NET Class Library (MVVM ViewModel)
+├── SolutionName.WpfServices       // WPF Class Library (WPF 관련 서비스)
 ├── SolutionName.WpfLib            // WPF Class Library (재사용 가능한 WPF 컴포넌트)
+├── SolutionName.WpfApp            // WPF Application Project (실행 진입점)
 ├── SolutionName.UI                // WPF Custom Control Library (커스텀 컨트롤)
 └── [Solution Folders]
     ├── SolutionName/              // 주요 프로젝트 그룹
@@ -425,8 +427,10 @@ SolutionName/
 - `.Abstractions`: .NET Class Library - Interface, abstract class 등 추상 타입 정의 (Inversion of Control)
 - `.Core`: .NET Class Library - 비즈니스 로직, 데이터 모델, 서비스 (UI 프레임워크 독립)
 - `.Core.Tests`: xUnit/NUnit/MSTest Test Project
+- `.ViewModels`: .NET Class Library - MVVM ViewModel (UI 프레임워크 독립)
+- `.WpfServices`: WPF Class Library - WPF 관련 서비스 (DialogService, NavigationService 등)
+- `.WpfLib`: WPF Class Library - 재사용 가능한 WPF UserControl, Window, Converter, Behavior, AttachedProperty
 - `.WpfApp`: WPF Application Project - 실행 진입점, App.xaml
-- `.WpfLib`: WPF Class Library - 재사용 가능한 WPF UserControl, Window
 - `.UI`: WPF Custom Control Library - ResourceDictionary 기반 커스텀 컨트롤
 
 **프로젝트 의존성 계층:**
@@ -453,8 +457,10 @@ Solution 'GameDataTool'
 │   ├── GameDataTool.Abstractions
 │   ├── GameDataTool.Core
 │   ├── GameDataTool.Core.Tests
-│   ├── GameDataTool.WpfApp
+│   ├── GameDataTool.ViewModels
+│   ├── GameDataTool.WpfServices
 │   ├── GameDataTool.WpfLib
+│   ├── GameDataTool.WpfApp
 │   └── GameDataTool.UI
 └── Solution Folder: Common
     ├── Common.Utilities
@@ -489,12 +495,22 @@ Solution 'GameDataTool'
 │   │       └── DataRepository.cs
 │   ├── GameDataTool.Core.Tests
 │   │   └── Services/
+│   ├── GameDataTool.ViewModels
+│   │   ├── MainViewModel.cs
+│   │   ├── HomeViewModel.cs
+│   │   └── SettingsViewModel.cs
+│   ├── GameDataTool.WpfServices
+│   │   ├── DialogService.cs
+│   │   ├── NavigationService.cs
+│   │   └── WindowService.cs
+│   ├── GameDataTool.WpfLib
+│   │   ├── Controls/
+│   │   ├── Converters/
+│   │   ├── Behaviors/
+│   │   └── AttachedProperties/
 │   ├── GameDataTool.WpfApp
 │   │   ├── App.xaml
-│   │   ├── Views/
-│   │   └── ViewModels/
-│   ├── GameDataTool.WpfLib
-│   │   └── Controls/
+│   │   └── Views/
 │   └── GameDataTool.UI
 │       ├── Themes/
 │       └── CustomControls/
@@ -1475,8 +1491,10 @@ SolutionName/
 ├── SolutionName.Abstractions      // .NET Class Library (Interface, abstract class 등 추상 타입)
 ├── SolutionName.Core              // .NET Class Library (비즈니스 로직, 순수 C#)
 ├── SolutionName.Core.Tests        // xUnit Test Project
-├── SolutionName.AvaloniaApp       // Avalonia Application Project (실행 진입점)
+├── SolutionName.ViewModels        // .NET Class Library (MVVM ViewModel)
+├── SolutionName.AvaloniaServices  // Avalonia Class Library (Avalonia 관련 서비스)
 ├── SolutionName.AvaloniaLib       // Avalonia Class Library (재사용 가능한 컴포넌트)
+├── SolutionName.AvaloniaApp       // Avalonia Application Project (실행 진입점)
 ├── SolutionName.UI                // Avalonia Custom Control Library (커스텀 컨트롤)
 └── [Solution Folders]
     ├── SolutionName/              // 주요 프로젝트 그룹
@@ -1487,8 +1505,10 @@ SolutionName/
 - `.Abstractions`: .NET Class Library - Interface, abstract class 등 추상 타입 정의 (Inversion of Control)
 - `.Core`: .NET Class Library - 비즈니스 로직, 데이터 모델, 서비스 (UI 프레임워크 독립)
 - `.Core.Tests`: xUnit/NUnit/MSTest Test Project
+- `.ViewModels`: .NET Class Library - MVVM ViewModel (UI 프레임워크 독립)
+- `.AvaloniaServices`: Avalonia Class Library - Avalonia 관련 서비스 (DialogService, NavigationService 등)
+- `.AvaloniaLib`: Avalonia Class Library - 재사용 가능한 UserControl, Window, Converter, Behavior, AttachedProperty
 - `.AvaloniaApp`: Avalonia Application Project - 실행 진입점, App.axaml
-- `.AvaloniaLib`: Avalonia Class Library - 재사용 가능한 UserControl, Window
 - `.UI`: Avalonia Custom Control Library - ControlTheme 기반 커스텀 컨트롤
 
 **프로젝트 의존성 계층:**
