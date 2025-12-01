@@ -1,3 +1,8 @@
+---
+name: xaml-coding
+description: "WPF CustomControl과 ResourceDictionary를 통한 Stand-Alone Control Style 작성"
+---
+
 # XAML 코드 작성 - WPF CustomControl
 
 WPF에서 XAML 코드 작성 시 CustomControl과 ResourceDictionary 사용 가이드입니다.

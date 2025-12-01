@@ -1,3 +1,8 @@
+---
+name: wpf-project-structure
+description: "WPF 솔루션 및 프로젝트 구조 설계 가이드 (Abstractions, Core, ViewModels, Services)"
+---
+
 # WPF 솔루션 및 프로젝트 구조
 
 WPF 프로젝트의 솔루션 및 프로젝트 구조 설계 가이드입니다.

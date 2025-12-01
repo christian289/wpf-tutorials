@@ -1,3 +1,8 @@
+---
+name: literal-string
+description: "C# Literal string을 const string으로 사전 정의하여 사용하는 패턴"
+---
+
 # Literal String 처리
 
 C# 코드에서 Literal string을 처리하는 방법에 대한 가이드입니다.

@@ -1,3 +1,8 @@
+---
+name: dependency-injection
+description: "Microsoft.Extensions.DependencyInjection과 GenericHost를 사용한 의존성 주입 패턴"
+---
+
 # Dependency Injection 및 GenericHost 사용
 
 .NET 프로젝트에서 Dependency Injection과 GenericHost를 사용하는 방법에 대한 가이드입니다.

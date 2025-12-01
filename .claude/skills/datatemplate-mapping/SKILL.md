@@ -1,3 +1,8 @@
+---
+name: datatemplate-mapping
+description: "DataTemplate을 사용한 ViewModel-View 자동 매핑 및 네비게이션 패턴"
+---
+
 # 5.8 DataTemplate을 사용한 View-ViewModel 자동 매핑
 
 WPF에서 DataTemplate을 사용하면 ViewModel 타입과 View를 자동으로 매핑할 수 있습니다. 이 패턴은 네비게이션 시나리오나 동적 콘텐츠 표시에 매우 유용합니다.

@@ -1,3 +1,8 @@
+---
+name: popup-focus
+description: "WPF Popup 컨트롤의 포커스 관리 패턴 (PreviewMouseDown 이벤트 활용)"
+---
+
 # 5.7 Popup 컨트롤 사용 시 주의사항
 
 WPF에서 Popup 컨트롤은 WPF Application에 포커스가 있을 때만 정상적으로 동작합니다. 다른 애플리케이션으로 포커스가 이동한 상태에서는 Popup이 제대로 표시되지 않거나 동작하지 않을 수 있습니다.

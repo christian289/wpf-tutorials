@@ -1,3 +1,8 @@
+---
+name: avalonia-project-structure
+description: "AvaloniaUI 솔루션 및 프로젝트 구조 설계 가이드"
+---
+
 # 6.2 AvaloniaUI 솔루션 및 프로젝트 구조
 
 #### 6.2.1 프로젝트 명명 규칙

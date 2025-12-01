@@ -1,3 +1,8 @@
+---
+name: axaml-coding
+description: "AvaloniaUI CustomControl과 ControlTheme를 통한 Stand-Alone Control Style 작성"
+---
+
 # 6.5 AXAML 코드 작성
 - **AXAML 코드를 생성할 때는 CustomControl을 사용하여 ControlTheme을 통한 Stand-Alone Control Style 사용**
 - 목적: 테마 분리 및 스타일 의존성 최소화

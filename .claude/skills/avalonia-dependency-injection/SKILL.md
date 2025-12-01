@@ -1,3 +1,8 @@
+---
+name: avalonia-dependency-injection
+description: "AvaloniaUI에서 GenericHost와 DI 사용 패턴"
+---
+
 # 6.6 Dependency Injection 및 GenericHost 사용
 
 AvaloniaUI에서도 WPF와 동일하게 GenericHost 패턴 적용:

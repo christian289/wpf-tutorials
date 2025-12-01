@@ -1,3 +1,8 @@
+---
+name: collectionview-mvvm
+description: "CollectionView를 Service Layer로 캡슐화하여 MVVM 원칙을 준수하는 패턴"
+---
+
 # 5.6 CollectionView를 사용한 MVVM 패턴
 
 #### 5.6.1 문제 상황

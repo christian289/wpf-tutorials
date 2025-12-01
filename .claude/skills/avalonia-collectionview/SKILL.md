@@ -1,3 +1,8 @@
+---
+name: avalonia-collectionview
+description: "AvaloniaUI에서 CollectionView 대안 (DataGridCollectionView, ReactiveUI)"
+---
+
 # 6.7 CollectionView를 사용한 MVVM 패턴
 
 **⚠️ 중요: AvaloniaUI는 WPF의 CollectionViewSource를 지원하지 않습니다.**

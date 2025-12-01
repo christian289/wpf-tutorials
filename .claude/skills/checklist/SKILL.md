@@ -1,3 +1,8 @@
+---
+name: checklist
+description: "C#, WPF, AvaloniaUI 코딩 전 확인 체크리스트"
+---
+
 # 9. 체크리스트
 
 코드 작성 전 확인사항:
