@@ -1,19 +1,22 @@
 ---
-name: collectionview-mvvm
-description: "CollectionView를 Service Layer로 캡슐화하여 MVVM 원칙을 준수하는 패턴"
+name: wpf-mvvm-collectionview
+description: 'WPF에서 CollectionView를 Service Layer로 캡슐화하여 MVVM 원칙을 준수하는 패턴'
 ---
 
 # 5.6 CollectionView를 사용한 MVVM 패턴
 
 #### 5.6.1 문제 상황
+
 하나의 원본 컬렉션을 여러 View에서 각각 다른 조건으로 필터링하여 사용하면서도 MVVM 원칙을 준수해야 하는 경우
 
 #### 5.6.2 핵심 원칙
+
 - **ViewModel은 WPF 관련 어셈블리를 참조하면 안 됨** (MVVM 위반)
 - **Service Layer를 통해 `CollectionViewSource` 접근을 캡슐화**
 - **ViewModel은 `IEnumerable` 또는 순수 BCL 타입만 사용**
 
 #### 5.6.3 아키텍처 계층 구조
+
 ```
 View (XAML)
     ↓ DataBinding
@@ -205,17 +208,20 @@ MyApp.Views/              // 모든 WPF 어셈블리 참조
 #### 5.6.6 참조 어셈블리 규칙
 
 **ViewModel 프로젝트가 참조하면 안 되는 어셈블리:**
+
 - ❌ `WindowsBase.dll` (ICollectionView 포함)
 - ❌ `PresentationFramework.dll` (CollectionViewSource 포함)
 - ❌ `PresentationCore.dll`
 
 **ViewModel 프로젝트가 참조 가능한 어셈블리:**
+
 - ✅ BCL (Base Class Library) 타입만 사용
 - ✅ `System.Collections.IEnumerable`
 - ✅ `System.Collections.ObjectModel.ObservableCollection<T>`
 - ✅ `System.ComponentModel.INotifyPropertyChanged`
 
 **Service 프로젝트가 참조 가능한 어셈블리:**
+
 - ✅ `WindowsBase.dll`
 - ✅ `PresentationFramework.dll`
 - ✅ 모든 WPF 관련 어셈블리
@@ -335,4 +341,3 @@ public sealed partial class AppViewModel(IMemberCollectionService memberService)
 - [Data Binding Overview - Collection Views](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/data/#binding-to-collections)
 - [How to: Filter Data in a View](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/data/how-to-filter-data-in-a-view)
 - [Service Layer Pattern](https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/models-data/validating-with-a-service-layer-cs#creating-a-service-layer)
-
