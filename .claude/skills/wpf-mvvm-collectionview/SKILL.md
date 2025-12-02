@@ -5,6 +5,34 @@ description: 'WPF에서 CollectionView를 Service Layer로 캡슐화하여 MVVM 
 
 # 5.6 CollectionView를 사용한 MVVM 패턴
 
+## 프로젝트 구조
+
+templates 폴더에 .NET 9 WPF 프로젝트 예제가 포함되어 있습니다.
+
+```
+templates/
+├── WpfCollectionViewSample.Core/           ← 순수 C# 모델 및 인터페이스
+│   ├── Member.cs
+│   ├── IMemberCollectionService.cs
+│   └── WpfCollectionViewSample.Core.csproj
+├── WpfCollectionViewSample.ViewModels/     ← ViewModel (WPF 참조 없음)
+│   ├── MainViewModel.cs
+│   ├── GlobalUsings.cs
+│   └── WpfCollectionViewSample.ViewModels.csproj
+├── WpfCollectionViewSample.WpfServices/    ← WPF Service Layer
+│   ├── MemberCollectionService.cs
+│   ├── GlobalUsings.cs
+│   └── WpfCollectionViewSample.WpfServices.csproj
+└── WpfCollectionViewSample.App/            ← WPF Application
+    ├── Views/
+    │   ├── MainWindow.xaml
+    │   └── MainWindow.xaml.cs
+    ├── App.xaml
+    ├── App.xaml.cs
+    ├── GlobalUsings.cs
+    └── WpfCollectionViewSample.App.csproj
+```
+
 #### 5.6.1 문제 상황
 
 하나의 원본 컬렉션을 여러 View에서 각각 다른 조건으로 필터링하여 사용하면서도 MVVM 원칙을 준수해야 하는 경우

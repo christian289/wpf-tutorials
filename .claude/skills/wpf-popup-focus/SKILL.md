@@ -11,9 +11,21 @@ WPF에서 Popup 컨트롤은 WPF Application에 포커스가 있을 때만 정�
 
 WPF에서 Popup 컨트롤을 사용할 경우, **PreviewMouseDown 이벤트를 통해 포커스를 강제로 가져와야 합니다.**
 
-#### 5.7.2 코드 예제
+## 프로젝트 구조
 
-scripts/MainWindow.cs 파일 참조
+templates 폴더에 .NET 9 WPF 프로젝트 예제가 포함되어 있습니다.
+
+```
+templates/
+└── WpfPopupSample.App/                  ← WPF Application
+    ├── Views/
+    │   ├── MainWindow.xaml
+    │   └── MainWindow.xaml.cs           ← 포커스 관리 패턴 구현
+    ├── App.xaml
+    ├── App.xaml.cs
+    ├── GlobalUsings.cs
+    └── WpfPopupSample.App.csproj
+```
 
 #### 5.7.2 핵심 원칙
 

@@ -7,6 +7,26 @@ description: "CommunityToolkit.Mvvm을 사용한 MVVM 패턴 구현 (ObservableP
 
 WPF에서 MVVM 패턴을 구현할 때 CommunityToolkit.Mvvm 사용 가이드입니다.
 
+## 프로젝트 구조
+
+templates 폴더에 .NET 9 WPF 프로젝트 예제가 포함되어 있습니다.
+
+```
+templates/
+├── WpfMvvmSample.App/           ← WPF Application Project
+│   ├── Views/
+│   │   ├── MainWindow.xaml
+│   │   └── MainWindow.xaml.cs
+│   ├── App.xaml
+│   ├── App.xaml.cs
+│   ├── GlobalUsings.cs
+│   └── WpfMvvmSample.App.csproj
+└── WpfMvvmSample.ViewModels/    ← ViewModel Class Library (UI 프레임워크 독립)
+    ├── UserViewModel.cs
+    ├── GlobalUsings.cs
+    └── WpfMvvmSample.ViewModels.csproj
+```
+
 ## 기본 원칙
 
 **MVVM을 구조로 잡을 때는 CommunityToolkit.Mvvm을 기본으로 사용**
