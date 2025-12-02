@@ -1,6 +1,6 @@
 ---
-name: xaml-coding
-description: "WPF CustomControl과 ResourceDictionary를 통한 Stand-Alone Control Style 작성"
+name: wpf-customcontrol-arhitecture-design-basic
+description: 'WPF CustomControl과 ResourceDictionary를 통한 Stand-Alone Control Style 작성'
 ---
 
 # XAML 코드 작성 - WPF CustomControl
