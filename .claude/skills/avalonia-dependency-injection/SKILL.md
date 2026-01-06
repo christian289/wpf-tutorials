@@ -5,7 +5,30 @@ description: "AvaloniaUI에서 GenericHost와 DI 사용 패턴"
 
 # 6.6 Dependency Injection 및 GenericHost 사용
 
-AvaloniaUI에서도 WPF와 동일하게 GenericHost 패턴 적용:
+AvaloniaUI에서도 WPF와 동일하게 GenericHost 패턴 적용
+
+## 프로젝트 구조
+
+templates 폴더에 .NET 9 AvaloniaUI 프로젝트 예제가 포함되어 있습니다.
+
+```
+templates/
+├── AvaloniaDISample.App/           ← Avalonia Application Project
+│   ├── Views/
+│   │   ├── MainWindow.axaml
+│   │   └── MainWindow.axaml.cs
+│   ├── App.axaml
+│   ├── App.axaml.cs
+│   ├── Program.cs
+│   ├── GlobalUsings.cs
+│   └── AvaloniaDISample.App.csproj
+└── AvaloniaDISample.ViewModels/    ← ViewModel Class Library (UI 프레임워크 독립)
+    ├── MainViewModel.cs
+    ├── GlobalUsings.cs
+    └── AvaloniaDISample.ViewModels.csproj
+```
+
+## App.axaml.cs 예시:
 
 ```csharp
 // App.axaml.cs

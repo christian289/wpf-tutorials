@@ -7,6 +7,26 @@ description: "Microsoft.Extensions.DependencyInjection과 GenericHost를 사용�
 
 .NET 프로젝트에서 Dependency Injection과 GenericHost를 사용하는 방법에 대한 가이드입니다.
 
+## 프로젝트 구조
+
+templates 폴더에 .NET 9 WPF 프로젝트 예제가 포함되어 있습니다.
+
+```
+templates/
+├── WpfDISample.App/           ← WPF Application Project
+│   ├── Views/
+│   │   ├── MainWindow.xaml
+│   │   └── MainWindow.xaml.cs
+│   ├── App.xaml
+│   ├── App.xaml.cs
+│   ├── GlobalUsings.cs
+│   └── WpfDISample.App.csproj
+└── WpfDISample.ViewModels/    ← ViewModel Class Library (UI 프레임워크 독립)
+    ├── MainViewModel.cs
+    ├── GlobalUsings.cs
+    └── WpfDISample.ViewModels.csproj
+```
+
 ## 핵심 원칙
 
 - **Microsoft.Extensions.DependencyInjection을 사용하여 의존성 주입 구현**
