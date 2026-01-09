@@ -29,21 +29,56 @@
 - 기본적으로는 C# 코드를 절차지향 프로그래밍(Procedural Programming)으로 작성할 것.
 - 요청을 할 경우에만 객체지향 프로그래밍(Object Orientation Programming)으로 작성할 것.
 
-## 7. 고성능 C# 코드
+## 7. Advanced .NET API (나중에 Skill로 빼야함.)
 
-고성능 C# 코드를 요청하면 다음 기술들을 사용:
+### 7.1 메모리 효율화, Zero Allocation
 
-- Reactive Extensions
-- ThreadLocal<T>
-- Task Async
-- PLINQ
-- Parallel.ForEach
-- .NET CLR GC Heap Memory Optimization
-- ObjectPool<T>
-- Memorycache<T>
-- Span<T>
-- HashSet<T>
-- ConcurrentDictionary<T>
+- .NET CLR GC Heap Memory Optimization Concepts
+- Microsoft.Extensions.ObjectPool.DefaultObjectPool<T> (.NET Platform Extension)
+- System.Runtime.Caching.Memorycache
+- System.Span<T>, System.Memory<T>
+- System.Buffers.ArrayPool<T>.Shared.Rent(), System.Buffers.ArrayPool<T>.Shared.Return()
+
+### 7.2 비동기
+
+- System.Threading.Tasks.Task
+
+### 7.3 병렬 처리
+
+- System.Threading.Tasks.Parallel
+- PLINQ (.AsParallel())
+
+#### 7.3.1 대용량 병렬 처리 전략
+
+- System.Collections.Concurrent.Patitioner<T>
+
+#### 7.3.2 병렬처리 컬렉션 동기화
+
+- System.Collections.Concurrent.ConcurrentDictionary<T>
+- System.Collections.Concurrent.ConcurrentQueue<T>
+- System.Collections.Concurrent.ConcurrentBag<T>
+
+#### 7.3.3 병렬처리 지역 변수
+
+- System.Threading.ThreadLocal<T>, System.Threading.AsyncLocal<T>
+
+### 7.4 고속 탐색
+
+- System.Collections.Generic.HashSet<T>
+
+### 7.5 Pub-Sub
+
+- System.Reactive
+- System.Threading.Channels
+
+### 7.6 고속 표준 입출력
+
+- Console.OpenStandardInput()
+- Console.OpenStandardOutput()
+
+### 7.7 Streaming
+
+- System.IO.Pipelines
 
 ## 8. 파일 구조
 
@@ -57,7 +92,7 @@
 
 ## 10. 불변 타입 최적화
 
-- 불변 타입을 통한 최적화를 위해서 `record`, `readonly struct`, `init;`과 같은 키워드를 적극적으로 활용.
+- 불변 타입을 통한 최적화를 위해서 `record`, `readonly struct`, `init`, `ReadOnlyCollection<T>`, `ReadOnlyList<T>`, `ReadOnlySpan<T>`과 같은 키워드를 적극적으로 활용.
 - 함수에서 return할 때 불변의 의미를 가진 값을 리턴할 때는 Readonly Type을 적용할 것.
 
 **예시:**
