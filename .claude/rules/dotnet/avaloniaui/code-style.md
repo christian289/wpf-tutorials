@@ -39,7 +39,7 @@
 
 ## 3. MVVM 패턴
 
-> **📌 상세 가이드**: `/mvvm-framework` skill 참조
+> **📌 상세 가이드**: `/communitytoolkit-mvvm` skill 참조
 
 ### 핵심 제약
 

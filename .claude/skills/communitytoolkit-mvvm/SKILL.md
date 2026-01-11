@@ -1,11 +1,11 @@
 ---
-name: mvvm-framework
+name: communitytoolkit-mvvm
 description: "CommunityToolkit.Mvvm을 사용한 MVVM 패턴 구현 (ObservableProperty Attribute 스타일)"
 ---
 
-# MVVM 프레임워크 - CommunityToolkit.Mvvm
+# CommunityToolkit.Mvvm 코드 지침
 
-WPF에서 MVVM 패턴을 구현할 때 CommunityToolkit.Mvvm 사용 가이드입니다.
+WPF/AvaloniaUI에서 MVVM 패턴을 구현할 때 CommunityToolkit.Mvvm 사용 가이드입니다.
 
 ## 프로젝트 구조
 

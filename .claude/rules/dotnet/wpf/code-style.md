@@ -36,7 +36,7 @@
 
 ## 3. MVVM 패턴
 
-> **📌 상세 가이드**: `/mvvm-framework` skill 참조
+> **📌 상세 가이드**: `/communitytoolkit-mvvm` skill 참조
 
 ### 핵심 제약
 
@@ -92,3 +92,14 @@
 
 - Mappings.xaml에 ViewModel-View DataTemplate 정의
 - ContentControl.Content에 ViewModel 바인딩하여 자동 View 렌더링
+
+---
+
+## 8. 고성능 렌더링 (DrawingContext)
+
+> **📌 상세 가이드**: `/wpf-drawingcontext-rendering` skill 참조
+
+- 대량 도형 렌더링 시 Shape 대신 DrawingContext 사용 (10-50배 성능 향상)
+- FrameworkElement 상속 후 OnRender에서 직접 그리기
+- Pen, Brush, Geometry에 Freeze() 적용 필수
+- InvalidateVisual()은 데이터 추가 완료 후 **한 번만** 호출
