@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(dir:*)",
+      "Bash(dotnet new:*)",
+      "Bash(dotnet add:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet run)",
+      "Bash(git mv:*)",
+      "Bash(powershell:*)",
+      "Bash(taskkill:*)"
     ]
   }
 }
