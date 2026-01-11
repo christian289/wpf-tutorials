@@ -29,56 +29,22 @@
 - 기본적으로는 C# 코드를 절차지향 프로그래밍(Procedural Programming)으로 작성할 것.
 - 요청을 할 경우에만 객체지향 프로그래밍(Object Orientation Programming)으로 작성할 것.
 
-## 7. Advanced .NET API (나중에 Skill로 빼야함.)
+## 7. Advanced .NET API
 
-### 7.1 메모리 효율화, Zero Allocation
+고성능 .NET API는 각 주제별 skill을 참조:
 
-- .NET CLR GC Heap Memory Optimization Concepts
-- Microsoft.Extensions.ObjectPool.DefaultObjectPool<T> (.NET Platform Extension)
-- System.Runtime.Caching.Memorycache
-- System.Span<T>, System.Memory<T>
-- System.Buffers.ArrayPool<T>.Shared.Rent(), System.Buffers.ArrayPool<T>.Shared.Return()
+| 주제 | 정식 버전 | 간소화 버전 |
+|------|-----------|-------------|
+| 메모리 효율화 | `/dotnet-zero-allocation` | `/dotnet-zero-allocation-lite` |
+| 비동기 프로그래밍 | `/dotnet-async` | `/dotnet-async-lite` |
+| 병렬 처리 | `/dotnet-parallel` | `/dotnet-parallel-lite` |
+| 고속 탐색 | `/dotnet-fast-lookup` | `/dotnet-fast-lookup-lite` |
+| Pub-Sub 패턴 | `/dotnet-pubsub` | `/dotnet-pubsub-lite` |
+| 고속 입출력 | `/dotnet-fast-io` | `/dotnet-fast-io-lite` |
+| Streaming | `/dotnet-pipelines` | `/dotnet-pipelines-lite` |
 
-### 7.2 비동기
-
-- System.Threading.Tasks.Task
-
-### 7.3 병렬 처리
-
-- System.Threading.Tasks.Parallel
-- PLINQ (.AsParallel())
-
-#### 7.3.1 대용량 병렬 처리 전략
-
-- System.Collections.Concurrent.Patitioner<T>
-
-#### 7.3.2 병렬처리 컬렉션 동기화
-
-- System.Collections.Concurrent.ConcurrentDictionary<T>
-- System.Collections.Concurrent.ConcurrentQueue<T>
-- System.Collections.Concurrent.ConcurrentBag<T>
-
-#### 7.3.3 병렬처리 지역 변수
-
-- System.Threading.ThreadLocal<T>, System.Threading.AsyncLocal<T>
-
-### 7.4 고속 탐색
-
-- System.Collections.Generic.HashSet<T>
-
-### 7.5 Pub-Sub
-
-- System.Reactive
-- System.Threading.Channels
-
-### 7.6 고속 표준 입출력
-
-- Console.OpenStandardInput()
-- Console.OpenStandardOutput()
-
-### 7.7 Streaming
-
-- System.IO.Pipelines
+- 정식 버전: 상세 설명과 다양한 패턴 포함
+- 간소화 버전: 핵심 패턴만 빠르게 참조
 
 ## 8. 파일 구조
 
@@ -108,106 +74,34 @@ public IReadOnlyList ReadOnlyReturnFunc()
 }
 ```
 
-## 12. Span<T> 사용 주의사항
+## 11. Span<T> 사용 주의사항
 
-- Span<T>, ReadOnlySpan<T>를 사용할 때는 async-await를 사용하지 못하므로 이 부분을 고려하여 코딩할 것.
-- ⚠️ 당신이 자주 실수하는 부분
+> **📌 상세 가이드**: `/dotnet-zero-allocation` skill 참조
 
-## 13. 코드 스타일
+- ⚠️ Span<T>, ReadOnlySpan<T>는 **async-await와 함께 사용 불가**
+- ref struct이므로 Boxing 불가, 클래스 필드 저장 불가, 람다 캡처 불가
+
+## 12. 코드 스타일
 
 - Early Return 코드 스타일을 이용할 것.
 - switch 문 사용 시 Pattern Matching 코드 스타일을 이용할 것.
 
-## 14. Literal String 처리
+## 13. Literal String 처리
 
-- Literal string에 대해서는 `const string`으로 사전에 정의하여 사용할 것.
-- 장문의 Literal string에 대해서는 string.Concat 또는 '+' Operator를 이용하지 말고 Raw Literal string 문법을 이용할 것.
+> **📌 상세 가이드**: `/literal-string` skill 참조
 
-**예시:**
+- Literal string은 `const string`으로 사전 정의하여 사용
+- Constants 클래스로 메시지 유형별 분리 관리
 
-```csharp
-// 예시 1
+## 14. Console Application DI
 
-// 좋은 예
-const string ErrorMessage = "오류가 발생했습니다.";
-// An error has occurred.
+> **📌 상세 가이드**: `/console-app-di` skill 참조
 
-if (condition)
-    throw new Exception(ErrorMessage);
+- GenericHost를 사용한 의존성 주입 패턴
 
-// 나쁜 예
-if (condition)
-    throw new Exception("오류가 발생했습니다.");
+## 15. Repository 패턴
 
-// 예시 2
+> **📌 상세 가이드**: `/dotnet-repository-pattern` skill 참조
 
-// 좋은 예
-string exampleLongString = "어느새 길어진 그림자를 따라서" +
-    "땅거미 진 어둠속을 그대와 걷고 있네요" +
-    "손을 마주 잡고 그 언제까지라도" +
-    "함께 있는것만으로 눈물이 나는 걸요";
-
-// 나쁜 예
-string exampleLongString = """
-    어느새 길어진 그림자를 따라서
-    땅거미 진 어둠속을 그대와 걷고 있네요
-    손을 마주 잡고 그 언제까지라도
-    함께 있는것만으로 눈물이 나는 걸요
-    """;
-```
-
-### 15. Console Application 개발 시 Generic Host를 이용하여 Dependency Injection 구현
-
-- Microsoft.Extensions.DependencyInjection을 사용하여 의존성 주입 구현
-- GenericHost (Microsoft.Extensions.Hosting)를 기본으로 사용
-- Constructor Injection을 통한 서비스 주입 방식 적용
-
-**예시:**
-
-```csharp
-// Program.cs
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
-// GenericHost를 사용한 DI 설정
-// Configure DI using GenericHost
-var host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((context, services) =>
-    {
-        // 서비스 등록
-        // Register services
-        services.AddSingleton<IUserRepository, UserRepository>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddTransient<IEmailService, EmailService>();
-
-        // 메인 애플리케이션 서비스 등록
-        // Register main application service
-        services.AddSingleton<App>();
-    })
-    .Build();
-
-// ServiceProvider를 통해 서비스 가져오기
-// Get service through ServiceProvider
-var app = host.Services.GetRequiredService<App>();
-await app.RunAsync();
-
-// 애플리케이션 클래스 - Constructor Injection
-// Application class - Constructor Injection
-public sealed class App(IUserService userService, IEmailService emailService)
-{
-    private readonly IUserService _userService = userService;
-    private readonly IEmailService _emailService = emailService;
-
-    public async Task RunAsync()
-    {
-        // 주입된 서비스 사용
-        // Use injected services
-        var users = await _userService.GetAllUsersAsync();
-
-        foreach (var user in users)
-        {
-            await _emailService.SendWelcomeEmailAsync(user.Email);
-        }
-    }
-}
-```
+- 데이터 접근 계층 추상화
+- Service Layer와 함께 사용
